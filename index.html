@@ -4,58 +4,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sequence Builder PRO V3</title>
+  <title>Animation Builder PRO V2</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <aside class="sidebar">
-    <h2>ניווט</h2>
-    <ul>
-      <li onclick="showSection('sequence')">Sequence Builder</li>
-      <li onclick="showSection('textEditor')">Text Editor</li>
-      <li onclick="showSection('preview')">Preview</li>
-    </ul>
+  <header>
+    <h1>Animation Builder PRO V2</h1>
+  </header>
+
+  <div class="builder-container">
+
+    <div class="form-group">
+      <label>בחר אנימציה:</label>
+      <select id="animationType">
+        <option value="fadeIn">Fade In</option>
+        <option value="slideInLeft">Slide In Left</option>
+        <option value="zoomIn">Zoom In</option>
+        <option value="fadeOut">Fade Out</option>
+        <option value="zoomOut">Zoom Out</option>
+        <option value="pulse">Pulse</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>מהירות (שניות):</label>
+      <input type="number" id="animationSpeed" min="0.1" step="0.1" value="1">
+    </div>
+
+    <div class="form-group">
+      <label>עיכוב (שניות):</label>
+      <input type="number" id="animationDelay" min="0" step="0.1" value="0">
+    </div>
+
+    <div class="form-group">
+      <label>חזרות:</label>
+      <input type="number" id="animationRepeat" min="0" value="0">
+      <small>0 = ללא חזרות, -1 = אינסוף</small>
+    </div>
+
+    <div class="buttons-group">
+      <button onclick="previewAnimation()">תצוגה חיה</button>
+      <button onclick="saveFavorite()">שמור למועדפים</button>
+      <button onclick="exportAnimation()">ייצא קוד</button>
+    </div>
+
+    <div class="preview-box" id="previewBox">תצוגה חיה</div>
+
+    <textarea id="exportedCode" rows="10" readonly></textarea>
+  </div>
+
+  <aside class="favorites-panel">
+    <h3>אנימציות מועדפות</h3>
+    <ul id="favoritesList"></ul>
   </aside>
-
-  <main class="main-container">
-
-    <header>
-      <h1>Sequence Builder PRO V3</h1>
-    </header>
-
-    <section id="sequence" class="active">
-      <h2>Sequence Builder</h2>
-      <ul id="stepsList"></ul>
-      <button onclick="addStep()">➕ הוסף שלב</button>
-      <button onclick="playSequence()">▶️ הפעל רצף</button>
-      <button onclick="saveProject()">💾 שמור פרויקט</button>
-      <button onclick="loadProject()">📂 טען פרויקט</button>
-      <button onclick="deleteProject()">🗑️ מחק פרויקט</button>
-      <button onclick="exportSequence()">📤 ייצא קוד</button>
-      <textarea id="exportedCode" rows="8" readonly></textarea>
-    </section>
-
-    <section id="textEditor">
-      <h2>Text Editor</h2>
-      <input type="text" id="liveText" value="טקסט לדוגמה" oninput="updateLiveText()" />
-      <div class="text-options">
-        <label>גודל:</label>
-        <input type="number" id="fontSize" value="24" oninput="updateLiveText()" />
-        <label>צבע:</label>
-        <input type="color" id="fontColor" value="#ffffff" oninput="updateLiveText()" />
-      </div>
-    </section>
-
-    <section id="preview">
-      <h2>Preview Area</h2>
-      <div id="previewBox" class="preview-box">תצוגה חיה</div>
-    </section>
-
-  </main>
-
-  <input type="file" id="projectFile" onchange="importProject(event)" hidden>
-  <button onclick="document.getElementById('projectFile').click()" style="position:fixed;bottom:10px;left:10px;">📥 ייבא JSON</button>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="script.js"></script>

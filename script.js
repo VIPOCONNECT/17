@@ -1,172 +1,90 @@
 
-let steps = [];
-let dragSrcEl = null;
+let favorites = [];
 
-function showSection(sectionId) {
-  document.querySelectorAll('section').forEach(section => {
-    section.classList.remove('active');
-  });
-  document.getElementById(sectionId).classList.add('active');
-}
-
-function addStep() {
-  const step = { id: Date.now(), animation: 'fadeIn', delay: 0, duration: 1 };
-  steps.push(step);
-  renderSteps();
-  saveToLocal();
-}
-
-function renderSteps() {
-  const stepsList = document.getElementById('stepsList');
-  stepsList.innerHTML = '';
-  steps.forEach((step, index) => {
-    const li = document.createElement('li');
-    li.setAttribute('draggable', true);
-    li.dataset.id = step.id;
-    li.innerHTML = `שלב ${index + 1}: 
-      <select onchange="updateStep(${step.id}, 'animation', this.value)">
-        <option value="fadeIn" ${step.animation === 'fadeIn' ? 'selected' : ''}>Fade In</option>
-        <option value="slideInLeft" ${step.animation === 'slideInLeft' ? 'selected' : ''}>Slide Left</option>
-        <option value="zoomIn" ${step.animation === 'zoomIn' ? 'selected' : ''}>Zoom In</option>
-        <option value="fadeOut" ${step.animation === 'fadeOut' ? 'selected' : ''}>Fade Out</option>
-      </select>
-      <input type="number" min="0" step="0.1" value="${step.delay}" onchange="updateStep(${step.id}, 'delay', this.value)"> עיכוב
-      <input type="number" min="0.1" step="0.1" value="${step.duration}" onchange="updateStep(${step.id}, 'duration', this.value)"> משך
-      <button onclick="removeStep(${step.id})">X</button>
-    `;
-    li.addEventListener('dragstart', handleDragStart);
-    li.addEventListener('dragover', handleDragOver);
-    li.addEventListener('drop', handleDrop);
-    li.addEventListener('dragend', handleDragEnd);
-    stepsList.appendChild(li);
-  });
-}
-
-function updateStep(id, field, value) {
-  const step = steps.find(s => s.id === id);
-  if (step) {
-    step[field] = field === 'delay' || field === 'duration' ? parseFloat(value) : value;
-    saveToLocal();
-  }
-}
-
-function removeStep(id) {
-  steps = steps.filter(s => s.id !== id);
-  renderSteps();
-  saveToLocal();
-}
-
-function handleDragStart(e) {
-  dragSrcEl = this;
-}
-
-function handleDragOver(e) {
-  e.preventDefault();
-}
-
-function handleDrop(e) {
-  if (dragSrcEl !== this) {
-    const srcIndex = Array.from(dragSrcEl.parentNode.children).indexOf(dragSrcEl);
-    const tgtIndex = Array.from(this.parentNode.children).indexOf(this);
-    const movedItem = steps.splice(srcIndex, 1)[0];
-    steps.splice(tgtIndex, 0, movedItem);
-    renderSteps();
-    saveToLocal();
-  }
-}
-
-function handleDragEnd() {
-  dragSrcEl = null;
-}
-
-function playSequence() {
+function previewAnimation() {
   const box = document.getElementById('previewBox');
+  const animType = document.getElementById('animationType').value;
+  const speed = parseFloat(document.getElementById('animationSpeed').value);
+  const delay = parseFloat(document.getElementById('animationDelay').value);
+  const repeat = parseInt(document.getElementById('animationRepeat').value);
+
   gsap.killTweensOf(box);
   box.style.opacity = 1;
   box.style.transform = "none";
-  let timeline = gsap.timeline();
-  steps.forEach(step => {
-    const anim = getAnimationParams(step.animation);
-    timeline.from(box, { ...anim, delay: step.delay, duration: step.duration });
-  });
-}
 
-function getAnimationParams(type) {
   const animations = {
     fadeIn: { opacity: 0 },
     slideInLeft: { x: '-100%', opacity: 0 },
     zoomIn: { scale: 0, opacity: 0 },
-    fadeOut: { opacity: 1 }
+    fadeOut: { opacity: 1 },
+    zoomOut: { scale: 1.5, opacity: 0 },
+    pulse: { scale: 1.1, yoyo: true, repeat: repeat === -1 ? -1 : 1 }
   };
-  return animations[type] || {};
-}
 
-function exportSequence() {
-  let code = `gsap.timeline()
-`;
-  steps.forEach(step => {
-    const anim = getAnimationParams(step.animation);
-    let params = [];
-    for (let key in anim) params.push(`${key}: ${typeof anim[key] === 'string' ? `'${anim[key]}'` : anim[key]}`);
-    params.push(`delay: ${step.delay}`);
-    params.push(`duration: ${step.duration}`);
-    code += `.from('#element', { ${params.join(', ')} })
-`;
+  gsap.from(box, {
+    ...animations[animType],
+    delay: delay,
+    duration: speed,
+    repeat: repeat === -1 ? -1 : repeat,
+    yoyo: repeat !== 0
   });
-  document.getElementById('exportedCode').value = code;
 }
 
-function saveToLocal() {
-  localStorage.setItem('sequenceProject', JSON.stringify(steps));
-}
+function saveFavorite() {
+  const animType = document.getElementById('animationType').value;
+  const speed = document.getElementById('animationSpeed').value;
+  const delay = document.getElementById('animationDelay').value;
+  const repeat = document.getElementById('animationRepeat').value;
 
-function loadProject() {
-  const data = localStorage.getItem('sequenceProject');
-  if (data) {
-    steps = JSON.parse(data);
-    renderSteps();
-  }
-}
-
-function saveProject() {
-  const blob = new Blob([JSON.stringify(steps)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'project.json';
-  a.click();
-}
-
-function deleteProject() {
-  localStorage.removeItem('sequenceProject');
-  steps = [];
-  renderSteps();
-}
-
-function importProject(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      steps = JSON.parse(e.target.result);
-      renderSteps();
-      saveToLocal();
-    } catch (err) {
-      alert('קובץ לא תקין');
-    }
+  const favorite = {
+    animType,
+    speed,
+    delay,
+    repeat
   };
-  reader.readAsText(file);
+
+  favorites.push(favorite);
+  renderFavorites();
 }
 
-function updateLiveText() {
-  const text = document.getElementById('liveText').value;
-  const size = document.getElementById('fontSize').value;
-  const color = document.getElementById('fontColor').value;
-  const box = document.getElementById('previewBox');
-  box.textContent = text;
-  box.style.fontSize = size + 'px';
-  box.style.color = color;
+function renderFavorites() {
+  const list = document.getElementById('favoritesList');
+  list.innerHTML = '';
+
+  favorites.forEach((fav, index) => {
+    const li = document.createElement('li');
+    li.textContent = `${fav.animType} | מהירות: ${fav.speed}s | עיכוב: ${fav.delay}s | חזרות: ${fav.repeat}`;
+    li.onclick = () => loadFavorite(fav);
+    list.appendChild(li);
+  });
 }
 
-window.addEventListener('load', loadProject);
+function loadFavorite(fav) {
+  document.getElementById('animationType').value = fav.animType;
+  document.getElementById('animationSpeed').value = fav.speed;
+  document.getElementById('animationDelay').value = fav.delay;
+  document.getElementById('animationRepeat').value = fav.repeat;
+
+  previewAnimation();
+}
+
+function exportAnimation() {
+  const animType = document.getElementById('animationType').value;
+  const speed = document.getElementById('animationSpeed').value;
+  const delay = document.getElementById('animationDelay').value;
+  const repeat = document.getElementById('animationRepeat').value;
+
+  const code = `
+gsap.from('#element', {
+  ${animType === 'pulse' ? 'scale: 1.1,' : animType === 'zoomIn' ? 'scale: 0,' : ''}
+  ${animType === 'slideInLeft' ? "x: '-100%'," : ''}
+  ${animType === 'fadeIn' || animType === 'fadeOut' ? 'opacity: 0,' : ''}
+  delay: ${delay},
+  duration: ${speed},
+  repeat: ${repeat},
+  yoyo: ${repeat !== '0'}
+});
+  `;
+
+  document.getElementById('exportedCode').value = code.trim();
+}
