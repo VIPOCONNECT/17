@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sequence Builder PRO V3</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <h2>ניווט</h2>
+    <ul>
+      <li onclick="showSection('sequence')">Sequence Builder</li>
+      <li onclick="showSection('textEditor')">Text Editor</li>
+      <li onclick="showSection('preview')">Preview</li>
+    </ul>
+  </aside>
+
+  <main class="main-container">
+
+    <header>
+      <h1>Sequence Builder PRO V3</h1>
+    </header>
+
+    <section id="sequence" class="active">
+      <h2>Sequence Builder</h2>
+      <ul id="stepsList"></ul>
+      <button onclick="addStep()">➕ הוסף שלב</button>
+      <button onclick="playSequence()">▶️ הפעל רצף</button>
+      <button onclick="saveProject()">💾 שמור פרויקט</button>
+      <button onclick="loadProject()">📂 טען פרויקט</button>
+      <button onclick="deleteProject()">🗑️ מחק פרויקט</button>
+      <button onclick="exportSequence()">📤 ייצא קוד</button>
+      <textarea id="exportedCode" rows="8" readonly></textarea>
+    </section>
+
+    <section id="textEditor">
+      <h2>Text Editor</h2>
+      <input type="text" id="liveText" value="טקסט לדוגמה" oninput="updateLiveText()" />
+      <div class="text-options">
+        <label>גודל:</label>
+        <input type="number" id="fontSize" value="24" oninput="updateLiveText()" />
+        <label>צבע:</label>
+        <input type="color" id="fontColor" value="#ffffff" oninput="updateLiveText()" />
+      </div>
+    </section>
+
+    <section id="preview">
+      <h2>Preview Area</h2>
+      <div id="previewBox" class="preview-box">תצוגה חיה</div>
+    </section>
+
+  </main>
+
+  <input type="file" id="projectFile" onchange="importProject(event)" hidden>
+  <button onclick="document.getElementById('projectFile').click()" style="position:fixed;bottom:10px;left:10px;">📥 ייבא JSON</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
