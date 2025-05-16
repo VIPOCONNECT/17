@@ -1,49 +1,37 @@
 
-* { box-sizing: border-box; }
-
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: #000;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  overflow: hidden;
-}
-
-canvas#bg {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: -1;
 }
 
 header {
-  padding: 10px;
+  padding: 20px;
   text-align: center;
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
   background: linear-gradient(90deg, #ff8a00, #e52e71);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin: 10px 0;
 }
 
 .controls {
+  margin: 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
-  padding: 10px;
-  width: 100%;
+  gap: 10px;
 }
 
 button {
-  padding: 10px 15px;
+  padding: 10px 20px;
   font-size: 14px;
   border-radius: 30px;
   border: none;
@@ -51,65 +39,30 @@ button {
   background: linear-gradient(to right, #ff416c, #ff4b2b);
   color: #fff;
   transition: 0.3s;
-  flex: 1 1 45%;
-  max-width: 200px;
 }
 
 button:hover {
-  transform: scale(1.05);
-}
-
-button.active {
-  background: linear-gradient(to right, #00b09b, #96c93d);
-  box-shadow: 0 0 15px rgba(0, 176, 155, 0.7);
+  transform: scale(1.1);
 }
 
 .demo-area {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 30px 10px;
-  margin-top: 20px;
-  width: 90%;
-  min-height: 100px;
+  padding: 40px;
+  margin-top: 30px;
+  min-height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 3rem;
   box-shadow: 0 0 20px rgba(0,0,0,0.3);
   transition: all 0.5s ease;
-  text-align: center;
-}
-
-.range-wrapper {
-  margin: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.range-wrapper label {
-  margin-bottom: 5px;
-}
-
-.text-input-wrapper {
-  margin: 10px 0 30px;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.text-input-wrapper input {
-  width: 90%;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
 }
 
 input[type='range'] {
-  width: 80%;
+  width: 200px;
+  margin-top: 10px;
 }
 
 .dark-mode {
@@ -123,10 +76,5 @@ input[type='range'] {
 }
 
 .toggle-mode {
-  margin: 15px auto 0;
-}
-
-@media (min-width: 600px) {
-  .demo-area { font-size: 3rem; }
-  h1 { font-size: 3rem; }
+  margin-top: 20px;
 }

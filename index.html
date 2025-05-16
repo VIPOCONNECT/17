@@ -3,49 +3,37 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-  <title>מערכת אנימציות PRO MAX</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>מערכת אנימציות PRO</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="bg"></canvas>
-
   <header>
-    <h1 class="sr">אנימציות טקסט PRO MAX</h1>
-    <button class="toggle-mode" onclick="toggleMode()">כהה / בהיר</button>
+    <h1>מערכת PRO להצגת אנימציות טקסט</h1>
+    <button class="toggle-mode" onclick="toggleMode()">מצב כהה/בהיר</button>
   </header>
 
-  <div class="controls sr">
-    <button id="btn-fadeIn" onclick="playAnimation('fadeIn')">Fade In</button>
-    <button id="btn-slideInLeft" onclick="playAnimation('slideInLeft')">Slide Left</button>
-    <button id="btn-slideInRight" onclick="playAnimation('slideInRight')">Slide Right</button>
-    <button id="btn-zoomIn" onclick="playAnimation('zoomIn')">Zoom In</button>
-    <button id="btn-rotateIn" onclick="playAnimation('rotateIn')">Rotate In</button>
-    <button id="btn-bounce" onclick="playAnimation('bounce')">Bounce</button>
-    <button id="btn-flipInX" onclick="playAnimation('flipInX')">Flip X</button>
-    <button id="btn-flipInY" onclick="playAnimation('flipInY')">Flip Y</button>
-    <button id="btn-neon" onclick="playAnimation('neon')">Neon</button>
-    <button id="btn-elastic" onclick="playAnimation('elastic')">Elastic Bounce</button>
-    <button onclick="startAutoDemo()">דמו אוטומטי</button>
-    <button id="stopBtn" onclick="stopAnimations()">עצור</button>
+  <div class="controls">
+    <button onclick="playAnimation('fadeIn')">Fade In</button>
+    <button onclick="playAnimation('slideInLeft')">Slide Left</button>
+    <button onclick="playAnimation('slideInRight')">Slide Right</button>
+    <button onclick="playAnimation('zoomIn')">Zoom In</button>
+    <button onclick="playAnimation('rotateIn')">Rotate In</button>
+    <button onclick="playAnimation('bounce')">Bounce</button>
+    <button onclick="playAnimation('flipInX')">Flip X</button>
+    <button onclick="playAnimation('flipInY')">Flip Y</button>
+    <button onclick="playAnimation('neon')">Neon</button>
+    <button onclick="startAutoDemo()">הפעל אוטומטי</button>
   </div>
 
-  <div class="demo-area sr" id="demoArea">NailArt Pro</div>
+  <div class="demo-area" id="demoArea">NailArt Pro</div>
 
-  <div class="range-wrapper sr">
+  <div style="margin-top:20px;">
     <label>מהירות:</label>
     <input type="range" id="speedSlider" min="0.1" max="3" value="1" step="0.1">
   </div>
 
-  <div class="text-input-wrapper sr">
-    <input type="text" id="customText" placeholder="כתוב טקסט מותאם אישית כאן" oninput="updateText()" />
-  </div>
-
-  <audio id="clickSound" src="https://www.soundjay.com/buttons/button-16.mp3"></audio>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/scrollreveal/4.0.9/scrollreveal.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
